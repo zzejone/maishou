@@ -5,9 +5,9 @@ const (
 	xmlEncoding = "UTF-8"
 
 	// BusinessCodeOK represents the business code for success.
-	BusinessCodeOK = 0
+	BusinessCodeOK = 200
 	// BusinessMsgOk represents the business message for success.
-	BusinessMsgOk = "ok"
+	BusinessMsgOk = "success"
 
 	// BusinessCodeError represents the business code for error.
 	BusinessCodeError = -1

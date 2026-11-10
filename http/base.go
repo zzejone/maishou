@@ -4,10 +4,12 @@ import (
 	"context"
 	"encoding/xml"
 	"net/http"
+	"time"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/x/errors"
 	"google.golang.org/grpc/status"
+
+	"github.com/zeromicro/x/errors"
 )
 
 // BaseResponse is the base response struct.
@@ -16,9 +18,10 @@ type BaseResponse[T any] struct {
 	Code int `json:"code" xml:"code"`
 	// Msg represents the business message, if Code = BusinessCodeOK,
 	// and Msg is empty, then the Msg will be set to BusinessMsgOk.
-	Msg string `json:"msg" xml:"msg"`
+	Msg string `json:"message" xml:"msg"`
 	// Data represents the business data.
-	Data T `json:"data,omitempty" xml:"data,omitempty"`
+	Data        T      `json:"data,omitempty" xml:"data,omitempty"`
+	CurrentTime string `json:"currentTime"`
 }
 
 type baseXmlResponse[T any] struct {
@@ -80,6 +83,8 @@ func wrapBaseResponse(v any) BaseResponse[any] {
 		resp.Msg = BusinessMsgOk
 		resp.Data = v
 	}
+
+	resp.CurrentTime = time.Now().Format(time.RFC3339Nano)
 
 	return resp
 }

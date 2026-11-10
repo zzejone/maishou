@@ -1,4 +1,4 @@
-module github.com/zeromicro/x
+module github.com/zzejone/maishou
 
 go 1.18
 

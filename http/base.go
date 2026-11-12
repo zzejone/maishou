@@ -22,6 +22,7 @@ type BaseResponse[T any] struct {
 	// Data represents the business data.
 	Data        T      `json:"data,omitempty" xml:"data,omitempty"`
 	CurrentTime string `json:"currentTime"`
+	Status      string `json:"status"`
 }
 
 type baseXmlResponse[T any] struct {
@@ -64,21 +65,27 @@ func wrapBaseResponse(v any) BaseResponse[any] {
 	var resp BaseResponse[any]
 	switch data := v.(type) {
 	case *errors.CodeMsg:
+		resp.Status = "fail"
 		resp.Code = data.Code
 		resp.Msg = data.Msg
 	case errors.CodeMsg:
+		resp.Status = "fail"
 		resp.Code = data.Code
 		resp.Msg = data.Msg
 	case *status.Status:
+		resp.Status = "fail"
 		resp.Code = int(data.Code())
 		resp.Msg = data.Message()
 	case interface{ GRPCStatus() *status.Status }:
+		resp.Status = "fail"
 		resp.Code = int(data.GRPCStatus().Code())
 		resp.Msg = data.GRPCStatus().Message()
 	case error:
+		resp.Status = "fail"
 		resp.Code = BusinessCodeError
 		resp.Msg = data.Error()
 	default:
+		resp.Status = "success"
 		resp.Code = BusinessCodeOK
 		resp.Msg = BusinessMsgOk
 		resp.Data = v
